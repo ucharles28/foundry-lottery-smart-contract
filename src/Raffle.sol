@@ -65,6 +65,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
      */
     event RaffleEntered(address indexed player);
     event WinnerPicked(address indexed winner);
+    event RequestedRaffleWinner(uint256 indexed requestId);
 
     constructor(
         uint256 entranceFee,
@@ -110,7 +111,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
         s_raffleState = RaffleState.CALCULATING;
 
         // Will revert if subscription is not set and funded.
-        s_vrfCoordinator.requestRandomWords(
+        uint256 requestId = s_vrfCoordinator.requestRandomWords(
             VRFV2PlusClient.RandomWordsRequest({
                 keyHash: i_keyHash,
                 subId: i_subscriptionId,
@@ -124,7 +125,7 @@ contract Raffle is VRFConsumerBaseV2Plus {
             })
         );
         // Quiz... is this redundant?
-        // emit RequestedRaffleWinner(requestId);
+        emit RequestedRaffleWinner(requestId);
     }
 
     /**
@@ -186,5 +187,13 @@ contract Raffle is VRFConsumerBaseV2Plus {
 
     function getPlayer(uint256 indexOfPlayer) external view returns (address) {
         return s_players[indexOfPlayer];
+    }
+
+    function getLastTimeStamp() external view returns(uint256) {
+        return s_lastTimeStamp;
+    }
+
+    function getRecentWinner() external view returns(address) {
+        return s_recentWinner;
     }
 }

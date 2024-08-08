@@ -17,5 +17,17 @@ This is an important pattern for coding solidity smart contract function. The go
 2. Effects (Internal Contact State Changes)
 3. Interactions (External Contract Interactions)
 
+# Command to add private key account
+cast wallet import myaccount --interactive
 
-cast 
+# Command to run script
+forge script script/Interactions.s.sol:FundSubscription --rpc-url $SEPOLIA_RPC_URL --account myaccount --broadcast
+
+# Types of test
+- unit -  Basic tests
+- integration - contract interactions
+- fork - sudo staging test
+- staging - run test on mainnet or testnet
+
+# Verifying contract with foundry
+forge verify-contract CONTRACT_ADDRESS  src/Raffle.sol:Raffle --etherscan-api-key $ETHERSCAN_API_KEY --rpc-url $SEPOLIA_RPC_URL --show-standard-json-input > json.json
